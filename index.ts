@@ -8,16 +8,6 @@ async function processRequests():Promise<any>{
     }
 }
 
-const allRules = [
-    FizzBuzz.BangRule, 
-    FizzBuzz.BongRule, 
-    FizzBuzz.BuzzRule,
-    FizzBuzz.EmptyRule,
-    FizzBuzz.FezzRule,
-    FizzBuzz.FizzRule,
-    FizzBuzz.ReverseRule
-];
-
 async function getValue():Promise<number>{
     var stdin = process.openStdin();
     console.log('type value to evaluate')
@@ -48,7 +38,7 @@ async function continueAddingRules(rules:FizzBuzz.Rule[]):Promise<boolean>{
 async function addRule(rules: FizzBuzz.Rule[]): Promise<FizzBuzz.Rule[]>{
     var stdin = process.openStdin();
 
-    console.log("Type keyword for one of available rules: Fizz, Fezz, Bang, Bong, Buzz, Empty, Reverse")
+    console.log("Type keyword for one of available rules: Fizz, Fezz, Bang, Bong, Buzz, Empty, Reverse, Part2")
     var getValue3 = new Promise<string>((resolve, reject)=> {
         stdin.addListener("data", function(d) {
             stdin.removeAllListeners();
@@ -81,6 +71,9 @@ async function addRule(rules: FizzBuzz.Rule[]): Promise<FizzBuzz.Rule[]>{
         case "Reverse":
             rules.push(FizzBuzz.ReverseRule);
         break;
+        case "Part2":
+            rules.push(FizzBuzz.Part2Rule);
+        break;
         default:
     }
     return rules;
@@ -100,6 +93,9 @@ async function processRequest():Promise<any>{
         (prevRule, currentRule, i, a) => prevRule.followedBy(currentRule), 
         new FizzBuzz.Rule((i) => false, (s,i) => s));
 
-    console.log(finalrule.applyRule([], value).reduce((p,c,i,a) => p+c), '');
+    let finalWords = finalrule.applyRule([], value);
+    if(finalWords.length!=0){
+        console.log(finalWords.reduce((p,c,i,a) => p+c), '');
+    }
 }
 
